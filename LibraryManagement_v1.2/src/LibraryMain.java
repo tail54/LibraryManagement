@@ -5,7 +5,7 @@ import java.util.*;
  * <p>사용자 인터페이스(CLI)를 제공하며, DB 연결하여 권한에 따른 메뉴 출력 및 사용자 입력을 처리합니다.</p>
  * <p> 2026년 5월 13일 시작</p>
  *
- * @author Su Man Nam
+ * @author 김태일
  * @version 1.2
  */
 public class LibraryMain {

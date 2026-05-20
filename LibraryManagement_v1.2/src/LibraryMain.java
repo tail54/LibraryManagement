@@ -152,7 +152,8 @@ public class LibraryMain {
     /**
      * 도서 정보의 수정 및 삭제를 처리하는 UI입니다.
      * <p>ID를 통해 도서를 조회하고, 선택에 따라 제목/저자 수정 또는 삭제를 수행합니다.</p>
-     *
+     * <p> 수정과 삭제의 </p>
+     * @see <a href="https://github.com/tail54/LibraryManagement/issues/1">Issue #1: 한 책 삭제시 DB에서 해당 책이 삭제 안됨</a>
      * @see LibraryManager#deleteBook(int)
      */
     private static void editOrDeleteUI() {

@@ -84,10 +84,12 @@ public class  LibraryManager {
 
     /**
      * 도서를 시스템에서 삭제합니다.
+     * <p>삭제하는 메서드 추가(2026.05.20)</p>
      * @param id 삭제할 도서 ID
      * @return 삭제 성공 여부
      */
     public boolean deleteBook(int id) {
+        repository.deleteBook(id);
         return bookMap.remove(id) != null;
     }
 

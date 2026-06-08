@@ -52,11 +52,7 @@ public class LibraryMain {
             System.out.print("아이디: ");
             String id = sc.nextLine();
 
-            // 첫 글자가 숫자인 경우 재입력 요청
-            if (!id.isEmpty() && Character.isDigit(id.charAt(0))) {
-                System.out.println("[오류] 아이디는 숫자로 시작할 수 없습니다. 다시 입력하세요.");
-                continue;
-            }
+
 
             System.out.print("비밀번호: ");
             String pw = sc.nextLine();

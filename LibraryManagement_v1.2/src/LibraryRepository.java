@@ -136,19 +136,20 @@ public class LibraryRepository {
      * @see <a href="https://github.com/sumannam/Java/issues/40">Issue #40: SQL Injection 취약점 개발</a>
      */
     public User loadUser(String id, String pw) {
-        //String sql = "SELECT * FROM users WHERE user_id = ? AND password = ?";
-        String sql = "SELECT * FROM users WHERE user_id = '" + id + "' AND password = '" + pw + "'";
-        //System.out.println(sql);
+        // 1. 위치 홀더(?)를 사용한 안전한 쿼리 틀 정의
+        String sql = "SELECT * FROM users WHERE user_id = ? AND password = ?";
 
+        // 2. 쿼리 틀을 먼저 준비 (DB는 이 구조를 명령어로 딱 고정합니다)
         try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+            // 3. 완성된 틀에 사용자가 입력한 '값'만 안전하게 채워 넣음
+            // 이제 입력값에 무슨 짓을 해도 '명령어'가 아닌 순수한 '문자열 데이터'로만 취급됩니다.
             pstmt.setString(1, id);
             pstmt.setString(2, pw);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    // 반환 타입이 User로 바뀌었으므로 이제 에러 없이 정상 작동합니다.
                     return new User(
                             rs.getString("user_id"),
                             rs.getString("password"),
@@ -159,7 +160,7 @@ public class LibraryRepository {
         } catch (SQLException e) {
             System.err.println("[오류] 로그인 조회 실패: " + e.getMessage());
         }
-        return null; // 일치하는 사용자가 없을 때
+        return null;
     }
 
     public void del4() {

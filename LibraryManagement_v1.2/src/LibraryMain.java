@@ -1,5 +1,5 @@
 import java.util.*;
-import java.io.Console;
+import java.net.InetAddress;
 
 /**
  * 도서 관리 시스템의 메인 클래스
@@ -57,6 +57,10 @@ public class LibraryMain {
 
             System.out.print("비밀번호: ");
             String pw = sc.nextLine();
+
+
+
+
 
             if (manager.login(id, pw)) return true;
             System.out.println("[오류] 아이디 또는 비밀번호가 틀렸습니다.");
@@ -326,12 +330,13 @@ public class LibraryMain {
      *
      * @see <a href="https://github.com/sumannam/Java/issues/43">Issue #43: OS Command Injection 취약점 개발</a>
      */
+    // [LibraryMain.java 중 checkServerUI() 메서드]
     private static void checkServerUI() {
         System.out.println("\n[서버 네트워크 진단]");
         System.out.print("- 접속을 확인 할 IP 주소를 입력하세요: ");
-        String ip = sc.nextLine(); // 여기서 사용자가 "127.0.0.1 && dir" 등을 입력함
+        String ip = sc.nextLine();
 
-        // Manager에게 명령어 실행을 맡김
+        // ★ 바로 이 부분! 메인이 직접 실행하지 않고 manager에게 ip를 넘겨줍니다.
         manager.checkServerStatus(ip);
     }
 }

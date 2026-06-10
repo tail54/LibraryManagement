@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 
 public class  LibraryManager {
     private Map<Integer, Book> bookMap;
@@ -170,22 +171,30 @@ public class  LibraryManager {
     }
 
     public void checkServerStatus(String ip) {
+        // 🟢 추가: 입력값이 비어있는지 먼저 안전하게 검증
+        if (ip == null || ip.trim().isEmpty()) {
+            System.out.println("[오류] IP 주소가 비어있습니다.");
+            return;
+        }
+
         try {
-            // [수정] cmd.exe /c 를 앞에 붙여서 쉘이 명령어를 해석하게 만듭니다.
-            String command = "cmd.exe /c ping -n 1 " + ip;
+            System.out.println("[진단] " + ip + " 서버 연결 확인 중... (자바 안전 모드)");
 
-            System.out.println("[시스템 실행 명령어]: " + command);
+            // 🟢 변경 포인트 1: 문자열 명령어를 만들지 않고, 자바 객체로 IP/호스트를 파싱함
+            // 만약 여기에 "127.0.0.1 && echo..." 같은 악성 공격 구문이 들어오면
+            // OS 명령어로 실행되지 못하고, 이 라인에서 바로 UnknownHostException 에러를 내며 차단됩니다.
+            InetAddress address = InetAddress.getByName(ip.trim());
 
-            Process process = Runtime.getRuntime().exec(command);
-            // 한글 깨짐 방지를 위해 EUC-KR 유지
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "EUC-KR"));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+            // 🟢 변경 포인트 2: cmd.exe 핑 대신, JVM 내부 소켓을 이용해 3초(3000ms) 타임아웃 핑을 보냄
+            if (address.isReachable(3000)) {
+                System.out.println("[결과] 서버가 정상적으로 응답합니다. (연결 성공)");
+            } else {
+                System.out.println("[결과] 서버 응답 시간이 초과되었습니다. (연결 실패)");
             }
         } catch (Exception e) {
-            System.out.println("[오류] 진단 중 예외 발생: " + e.getMessage());
+            // 🟢 변경 포인트 3: 공격 페이로드가 들어오면 이 예외 처리 구역으로 튕겨 나감 (안전 구역)
+            System.out.println("[오류] 올바르지 않은 호스트 또는 IP 주소 형식입니다.");
         }
     }
+
 }

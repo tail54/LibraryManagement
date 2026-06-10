@@ -61,7 +61,7 @@ public class LibraryMain {
             // 시스템 콘솔 객체 획득
             Console console = System.console();
 
-            
+
 
             if (manager.login(id, pw)) return true;
             System.out.println("[오류] 아이디 또는 비밀번호가 틀렸습니다.");
